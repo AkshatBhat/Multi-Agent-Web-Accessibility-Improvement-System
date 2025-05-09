@@ -12,19 +12,21 @@ class ContrastAgent:
 
     def preprocess(self, raw_json: str) -> list[str]:
         """
-        Parse the JSON and return a list of input strings (one per contrast violation).
+        Parse the JSON and return a list of input strings (only for contrast violations).
         """
         doc = json.loads(raw_json)
         prompts = []
 
         for vp in doc.get("viewports", []):
             for c in vp.get("contrast", []):
-                role = c.get("role", "unknown")
-                fg = ",".join(map(str, c.get("fg", [0, 0, 0])))
-                bg = ",".join(map(str, c.get("bg", [255, 255, 255])))
                 contrast_val = c.get("contrast", 1.0)
-                prompt = f"role: {role}, fg: {fg}, bg: {bg}, contrast: {contrast_val:.2f}"
-                prompts.append(prompt)
+                # Only keep if below WCAG minimum contrast ratio (e.g., 4.5 for normal text)
+                if contrast_val < 4.5:
+                    role = c.get("role", "unknown")
+                    fg = ",".join(map(str, c.get("fg", [0, 0, 0])))
+                    bg = ",".join(map(str, c.get("bg", [255, 255, 255])))
+                    prompt = f"role: {role}, fg: {fg}, bg: {bg}, contrast: {contrast_val:.2f}"
+                    prompts.append(prompt)
 
         if not prompts:
             raise ValueError("No contrast violations found in JSON.")
