@@ -2,3 +2,4 @@
 * text=auto
 agents/semantic_agent/t5_semantic_agent_final/*.safetensors filter=lfs diff=lfs merge=lfs -text
 agents/semantic_agent/t5_semantic_agent_final/*.bin filter=lfs diff=lfs merge=lfs -text
+agent_pickles/*.pkl filter=lfs diff=lfs merge=lfs -text
