@@ -1,0 +1,10 @@
+autogen
+autogen-agentchat
+autogen-ext[openai]
+torch
+torchvision
+transformers>=4.40
+sentencepiece
+pillow
+beautifulsoup4
+playwright
