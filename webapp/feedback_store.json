@@ -1,0 +1,133 @@
+[
+  {
+    "id": "ffa9de58-e0ce-481f-a40e-385c19a98701",
+    "timestamp": "2025-05-06T01:19:54.207248",
+    "page_id": "1655886848980",
+    "agent": "semantic",
+    "suggestion": {
+      "node": "#h3-12",
+      "issue_type": "heading-order",
+      "detail": "H3 appears before H2.",
+      "fix": "Change <h3> to <h2> or reorder headings."
+    },
+    "action": "up",
+    "comment": ""
+  },
+  {
+    "id": "806ea2f6-adda-48e1-84e7-5d2700f0c125",
+    "timestamp": "2025-05-06T01:20:08.158057",
+    "page_id": "1655886848980",
+    "agent": "caption",
+    "suggestion": {
+      "node": "img[alt='']",
+      "issue_type": "image-alt-missing",
+      "detail": "Image missing alt.",
+      "fix": "Provide meaningful alt text."
+    },
+    "action": "down",
+    "comment": ""
+  },
+  {
+    "id": "7c8334e2-73fd-4147-971a-674f7b88d646",
+    "timestamp": "2025-05-06T01:20:47.447527",
+    "page_id": "1655886848980",
+    "agent": "contrast",
+    "suggestion": {
+      "node": "#cta-btn",
+      "issue_type": "color-contrast",
+      "detail": "Color ratio 4.1 < 4.5.",
+      "fix": "Darken text to #374151."
+    },
+    "action": "up",
+    "comment": ""
+  },
+  {
+    "id": "fda36e9f-a9b7-4a35-9ed7-2e6bc950ee9f",
+    "timestamp": "2025-05-06T02:15:01.749749",
+    "page_id": "1655886848980",
+    "agent": "contrast",
+    "suggestion": {
+      "node": "#cta-btn",
+      "issue_type": "color-contrast",
+      "detail": "Color ratio 4.1 < 4.5.",
+      "fix": "Darken text to #374151."
+    },
+    "action": "up",
+    "comment": ""
+  },
+  {
+    "id": "7fe9ed21-ed4b-41d3-b966-4e4a00dd0da5",
+    "ts": "2025-05-06T02:19:36.317188",
+    "page_id": "1655886848980",
+    "agent": "fixing",
+    "suggestion": {
+      "node": "#h3-12",
+      "issue_type": "heading-order",
+      "detail": "H3 appears before H2."
+    },
+    "action": "up",
+    "comment": ""
+  },
+  {
+    "id": "fc801cbd-1ddb-49c9-a6ad-509e01e812cf",
+    "ts": "2025-05-06T02:19:43.138871",
+    "page_id": "1655886848980",
+    "agent": "fixing",
+    "suggestion": {
+      "node": "#h3-12",
+      "issue_type": "heading-order",
+      "detail": "H3 appears before H2."
+    },
+    "action": "down",
+    "comment": ""
+  },
+  {
+    "id": "5818c0a1-d9be-4d40-930b-7615e91bfa32",
+    "timestamp": "2025-05-06T03:18:45.035449",
+    "page_id": "1655886848980",
+    "agent": "fixer",
+    "suggestion": {
+      "node": "img[alt='']",
+      "issue_type": "image-alt-missing",
+      "fix": "Add alt='Company logo: stylised dragon'."
+    },
+    "action": "up",
+    "comment": ""
+  },
+  {
+    "page_id": "1655886848980",
+    "suggestion": {
+      "node": "#cta-btn",
+      "issue_type": "color-contrast",
+      "detail": "4.1:1 contrast",
+      "fix": "Darken text to #374151 for 7.2\u2009:\u20091 contrast"
+    },
+    "action": "up",
+    "comment": "",
+    "timestamp": "2025-05-08T19:01:58.372856"
+  },
+  {
+    "page_id": "1655886848980",
+    "suggestion": {
+      "node": "img[alt='']",
+      "issue_type": "image-alt-missing",
+      "detail": "Missing alt",
+      "fix": "Add alt='Company logo: stylised dragon'"
+    },
+    "action": "up",
+    "comment": "",
+    "timestamp": "2025-05-08T19:02:08.306690"
+  },
+  {
+    "page_id": "1655886848980",
+    "suggestion": {
+      "node": "img[alt='']",
+      "issue_type": "image-alt-missing",
+      "detail": "Missing alt",
+      "fix": "Add alt='Company logo: stylised dragon'"
+    },
+    "action": "up",
+    "comment": "",
+    "timestamp": "2025-05-08T23:40:17.063358"
+  }
+]
