@@ -4,20 +4,22 @@ const path      = require('path');
 const puppeteer = require('puppeteer');
 const { AxePuppeteer } = require('axe-puppeteer');
 
-const FAILURE_LOG = '/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k/axe_failures.txt';
-
-// clear out old failure log
-try {
-  fs.writeFileSync(FAILURE_LOG, '');
-} catch {
-  // ignore
-}
+const EXAMPLE_FAILURE_LOG = '/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k/axe_failures.txt';
 
 (async () => {
-  const [, , jobsFile] = process.argv;
+  const [, , jobsFile, failureLogArg] = process.argv;
   if (!jobsFile) {
-    console.error('Usage: node run-axe-puppeteer.js <axe_jobs.json>');
+    console.error('Usage: node run-axe-puppeteer.js <axe_jobs.json> [failure_log_path]');
+    console.error(`Example failure log path: ${EXAMPLE_FAILURE_LOG}`);
     process.exit(1);
+  }
+  const failureLog = failureLogArg || process.env.AXE_FAILURE_LOG || path.join(process.cwd(), 'axe_failures.txt');
+
+  // clear out old failure log
+  try {
+    fs.writeFileSync(failureLog, '');
+  } catch {
+    // ignore
   }
 
   let jobs;
@@ -66,7 +68,7 @@ try {
       }
       try {
         fs.appendFileSync(
-          FAILURE_LOG,
+          failureLog,
           `${pageId}@${vpIndex}\t${htmlUrl}\t${err.message}\n`
         );
       } catch (logErr) {

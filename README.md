@@ -128,6 +128,18 @@ Expected JSON shape is documented in `json_structure.txt` and follows:
 
 `test_data/test_file.json` is a concrete sample payload you can use for local testing.
 
+## External Dataset (WebUI-7k)
+
+The full `WebUI-7k` dataset is intentionally **not** stored in this GitHub repository (size and portability reasons).
+
+- Google Drive (viewer access): https://drive.google.com/drive/folders/1khjrM0XA19HHPgV8hPlEoBhAnzoMempU?usp=sharing
+
+Example local dataset root used during development:
+
+- `/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k`
+
+Scripts in `scripts/` are configurable via CLI flags and/or environment variables so you can point to your own local dataset location.
+
 ## Setup
 
 ### 1) Python environment (root pipeline/agents)
@@ -172,15 +184,32 @@ This produces:
 
 ### B) Bulk dataset generation flow (WebUI7k-style inputs)
 
-1. Update path constants in `scripts/phase1_collect.py` and `scripts/phase3_and_4.py` to your local dataset location.
-2. Run:
+Set a local dataset root (replace with your own path). Example:
 
 ```bash
-python scripts/phase1_collect.py
-node scripts/run-axe-puppeteer.js axe_jobs.json
-node scripts/rerun_axe_failures.js /path/to/failures.txt
-python scripts/phase3_and_4.py
+export WEBUI7K_ROOT="/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k"
 ```
+
+Run:
+
+```bash
+python scripts/phase1_collect.py --base-dir "$WEBUI7K_ROOT/train_split_web7k"
+node scripts/run-axe-puppeteer.js axe_jobs.json "$WEBUI7K_ROOT/axe_failures.txt"
+node scripts/rerun_axe_failures.js /path/to/failures.txt
+python scripts/phase3_and_4.py --base-dir "$WEBUI7K_ROOT"
+```
+
+Path configuration support added in scripts:
+
+- `scripts/phase1_collect.py`
+  - `--base-dir`, `--viewports`, `--intermediate-dir`, `--jobs-file`
+  - env: `WEBUI7K_TRAIN_DIR` or `WEBUI7K_ROOT`
+- `scripts/phase3_and_4.py`
+  - `--base-dir`, `--train-dir`, `--pkl-path`, `--output-dir`
+  - env: `WEBUI7K_ROOT`, `WEBUI7K_TRAIN_DIR`, `WEBUI7K_PKL_PATH`, `WEBUI7K_OUTPUT_DIR`
+- `scripts/run-axe-puppeteer.js`
+  - args: `<axe_jobs.json> [failure_log_path]`
+  - env fallback: `AXE_FAILURE_LOG`
 
 ### C) Run multi-agent orchestration example
 
@@ -215,7 +244,7 @@ Feedback platform used in the study:
 
 ## Known Limitations and Implementation Notes
 
-- Several scripts contain machine-specific absolute paths and should be configured before running on a new system.
+- Notebook files (`baseCode.ipynb`, `training/contrast_agent.ipynb`) still include Google Colab-specific paths (for example `/content/drive/...`) as part of the original experimentation workflow.
 - `webapp/accessibility_eval_app.py` currently includes Supabase credentials directly in code; move these to environment variables before production use.
 - `scripts/calling_agents.py` references pickle filenames that may not exactly match current files in `agent_pickles/`; adjust names/paths as needed.
 - Large model files in `agent_pickles/` make repository operations heavier.

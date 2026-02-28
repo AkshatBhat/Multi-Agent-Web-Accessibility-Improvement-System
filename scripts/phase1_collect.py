@@ -1,16 +1,58 @@
 #!/usr/bin/env python3
+import argparse
 import os
 import re
 import json
 import gzip
 import pickle
+import sys
 from tqdm import tqdm
 from bs4 import BeautifulSoup
 
-# ─── CONFIG ─────────────────────────────────────────────────────────────────────
-BASE_DIR        = "/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k/train_split_web7k"
-VIEWPORTS       = ["1280-720","1366-768","1536-864","1920-1080","iPad-Pro","iPhone-13 Pro"]
-os.makedirs("intermediate", exist_ok=True)  # folder for intermediate pickle
+DEFAULT_VIEWPORTS = ["1280-720", "1366-768", "1536-864", "1920-1080", "iPad-Pro", "iPhone-13 Pro"]
+EXAMPLE_WEBUI7K_ROOT = "/Users/akshat/Data/UIUC/Spring 2025/Courses/CS 568 User-Centered Machine Learning/Project/WebUI-7k"
+DEFAULT_TRAIN_SUBDIR = "train_split_web7k"
+
+
+def _default_base_dir():
+    train_dir = os.getenv("WEBUI7K_TRAIN_DIR")
+    if train_dir:
+        return train_dir
+    root_dir = os.getenv("WEBUI7K_ROOT")
+    if root_dir:
+        return os.path.join(root_dir, DEFAULT_TRAIN_SUBDIR)
+    return None
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Phase 1: collect semantic/contrast/captioning metadata and schedule Axe jobs."
+    )
+    parser.add_argument(
+        "--base-dir",
+        default=_default_base_dir(),
+        help=(
+            "Path to the WebUI7k train split folder. "
+            "Defaults to WEBUI7K_TRAIN_DIR, or WEBUI7K_ROOT/train_split_web7k."
+        ),
+    )
+    parser.add_argument(
+        "--viewports",
+        nargs="+",
+        default=DEFAULT_VIEWPORTS,
+        help="Viewport IDs to process.",
+    )
+    parser.add_argument(
+        "--intermediate-dir",
+        default="intermediate",
+        help="Directory where per_page.pkl will be written.",
+    )
+    parser.add_argument(
+        "--jobs-file",
+        default="axe_jobs.json",
+        help="Output path for generated Axe jobs JSON.",
+    )
+    return parser.parse_args()
 
 # ─── HELPERS ────────────────────────────────────────────────────────────────────
 def load_json(path):
@@ -42,15 +84,27 @@ def contrast_ratio(fg,bg):
 
 # ─── PHASE 1 ─────────────────────────────────────────────────────────────────────
 def main():
+    args = parse_args()
+    base_dir = args.base_dir
+    if not base_dir:
+        print("❌ Missing --base-dir (or WEBUI7K_TRAIN_DIR / WEBUI7K_ROOT env var).", file=sys.stderr)
+        print(f"   Example train dir: {EXAMPLE_WEBUI7K_ROOT}/{DEFAULT_TRAIN_SUBDIR}", file=sys.stderr)
+        sys.exit(1)
+    if not os.path.isdir(base_dir):
+        print(f"❌ base_dir does not exist or is not a directory: {base_dir}", file=sys.stderr)
+        sys.exit(1)
+
+    os.makedirs(args.intermediate_dir, exist_ok=True)
+
     per_page = {}
     axe_jobs = []
 
-    for pid in tqdm(os.listdir(BASE_DIR), desc="Pages"):
-        page_dir = os.path.join(BASE_DIR, pid)
+    for pid in tqdm(os.listdir(base_dir), desc="Pages"):
+        page_dir = os.path.join(base_dir, pid)
         if not os.path.isdir(page_dir): continue
 
         result = {'page_id': pid, 'viewports': []}
-        for vp in VIEWPORTS:
+        for vp in args.viewports:
             prefix = vp if vp in ("iPad-Pro","iPhone-13 Pro") else f"default_{vp}"
             needed = [f"{prefix}-html.html",
                       f"{prefix}-axtree.json.gz",
@@ -172,9 +226,12 @@ def main():
         per_page[pid]=result
 
     # write out
-    json.dump(axe_jobs, open("axe_jobs.json","w"), indent=2)
-    pickle.dump(per_page, open("intermediate/per_page.pkl","wb"))
-    print("Phase 1 done: wrote axe_jobs.json + intermediate/per_page.pkl")
+    pkl_path = os.path.join(args.intermediate_dir, "per_page.pkl")
+    with open(args.jobs_file, "w", encoding="utf-8") as f:
+        json.dump(axe_jobs, f, indent=2)
+    with open(pkl_path, "wb") as f:
+        pickle.dump(per_page, f)
+    print(f"Phase 1 done: wrote {args.jobs_file} + {pkl_path}")
 
 if __name__=="__main__":
     main()
