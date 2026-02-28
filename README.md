@@ -255,3 +255,7 @@ Project presentation files are stored under:
 
 - `reports_and_presentations/CS 568 Group 51 Final Presentation.pdf`
 - `reports_and_presentations/CS 568 Group 51 Final Presentation.pptx`
+
+Research paper report file is stored under:
+
+- `reports_and_presentations/Research Paper - Multi-Agent Web Accessibility Improvement System.pdf`
