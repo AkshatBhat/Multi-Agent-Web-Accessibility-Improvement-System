@@ -165,7 +165,16 @@ npm install puppeteer axe-puppeteer
 ```bash
 cd webapp
 pip install -r requirements.txt
+export SUPABASE_URL="https://<your-project>.supabase.co"
+export SUPABASE_KEY="<your-anon-or-service-role-key>"
 streamlit run accessibility_eval_app.py
+```
+
+You can also configure credentials using Streamlit secrets in `webapp/.streamlit/secrets.toml`:
+
+```toml
+SUPABASE_URL = "https://<your-project>.supabase.co"
+SUPABASE_KEY = "<your-key>"
 ```
 
 ## Running the System
@@ -245,9 +254,8 @@ Feedback platform used in the study:
 ## Known Limitations and Implementation Notes
 
 - Notebook files (`baseCode.ipynb`, `training/contrast_agent.ipynb`) still include Google Colab-specific paths (for example `/content/drive/...`) as part of the original experimentation workflow.
-- `webapp/accessibility_eval_app.py` currently includes Supabase credentials directly in code; move these to environment variables before production use.
+- Ensure `SUPABASE_URL` and `SUPABASE_KEY` are set in environment variables or Streamlit secrets before running `webapp/accessibility_eval_app.py`.
 - `scripts/calling_agents.py` references pickle filenames that may not exactly match current files in `agent_pickles/`; adjust names/paths as needed.
-- Large model files in `agent_pickles/` make repository operations heavier.
 
 ## Research Paper Report and Presentations
 

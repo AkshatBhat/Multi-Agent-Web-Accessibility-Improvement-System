@@ -7,9 +7,41 @@ from supabase import create_client, Client
 # ----------------------
 # Supabase Configuration
 # ----------------------
-SUPABASE_URL = "https://dbumrbpmazqmnuknmjnu.supabase.co"
-SUPABASE_KEY = "REDACTED_SUPABASE_KEY"
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+def _read_supabase_credentials():
+    # Priority:
+    # 1) Environment variables
+    # 2) Streamlit secrets with flat keys
+    # 3) Streamlit secrets with nested supabase.{url,key}
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_KEY")
+
+    if not url or not key:
+        try:
+            url = url or st.secrets.get("SUPABASE_URL")
+            key = key or st.secrets.get("SUPABASE_KEY")
+            supabase_cfg = st.secrets.get("supabase", {})
+            url = url or supabase_cfg.get("url")
+            key = key or supabase_cfg.get("key")
+        except Exception:
+            # secrets.toml may not exist in local dev
+            pass
+
+    return url, key
+
+
+SUPABASE_URL, SUPABASE_KEY = _read_supabase_credentials()
+if not SUPABASE_URL or not SUPABASE_KEY:
+    st.error(
+        "Missing Supabase credentials. Configure SUPABASE_URL and SUPABASE_KEY "
+        "as environment variables or Streamlit secrets."
+    )
+    st.stop()
+
+try:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+except Exception as e:
+    st.error(f"Failed to initialize Supabase client: {e}")
+    st.stop()
 
 # ----------------------
 # Streamlit Configuration
@@ -637,4 +669,3 @@ with tab2:
         c2.metric("👍 Upvotes", ups)
         c3.metric("👎 Downvotes", downs)
         c4.metric("Agreement", f"{agreement:.0%}")
-
