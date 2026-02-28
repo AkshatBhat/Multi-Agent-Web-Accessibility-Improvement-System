@@ -159,4 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Macbook
+.DS_Store
+
+# Project-related
 agents/semantic_agent/t5_semantic_agent_final/
