@@ -45,6 +45,12 @@ High-level flow:
 - Recommendations are shown in a Streamlit UI, where users upvote/downvote fixes.
 - Feedback is used to build a fixes dataset for improving future model behavior.
 
+## Demo Video
+
+Streamlit web app demo video:
+
+- [Watch the demo](reports_and_presentations/streamlit-web-app-demo.mp4)
+
 ## What Is In This Repo
 
 ### Core Pipeline
@@ -103,12 +109,6 @@ High-level flow:
 
 - `webapp/app.py`
   - Minimal FastAPI prototype with `/analyze` and `/feedback` endpoints.
-
-## Demo Video
-
-Streamlit web app demo video:
-
-- [Watch the demo](reports_and_presentations/streamlit-web-app-demo.mp4)
 
 ## Repository Layout
 
