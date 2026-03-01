@@ -33,6 +33,18 @@ The project was structured around three course research questions:
 
 In this repository, RQ1/RQ2 are reflected in the data + agent pipeline, and RQ3 is reflected in the evaluation app and feedback analysis workflow.
 
+## Model Workflow
+
+![Model Workflow](reports_and_presentations/model_workflow.png)
+
+High-level flow:
+
+- WebUI7k data is augmented with AXE violations during preprocessing.
+- Fine-tuned specialist agents (Semantic, Contrast, Image Captioning) are combined with GPT-based agents in an aggregation stage.
+- The multi-agent system identifies accessibility violations and passes them to a Fixing Agent for consolidated recommendations.
+- Recommendations are shown in a Streamlit UI, where users upvote/downvote fixes.
+- Feedback is used to build a fixes dataset for improving future model behavior.
+
 ## What Is In This Repo
 
 ### Core Pipeline
@@ -91,6 +103,12 @@ In this repository, RQ1/RQ2 are reflected in the data + agent pipeline, and RQ3 
 
 - `webapp/app.py`
   - Minimal FastAPI prototype with `/analyze` and `/feedback` endpoints.
+
+## Demo Video
+
+Streamlit web app demo video:
+
+- [Watch the demo](reports_and_presentations/streamlit-web-app-demo.mp4)
 
 ## Repository Layout
 
