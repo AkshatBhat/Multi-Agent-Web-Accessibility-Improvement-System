@@ -4,15 +4,6 @@ This repository contains a multi-agent pipeline for detecting, explaining, and p
 
 The project was developed for **CS 568: User-Centered Machine Learning** at the **University of Illinois Urbana-Champaign (UIUC)** in **Spring 2025**.
 
-## Team
-
-- Akshat Bhat
-- Trusha Talati
-- Isha Agrawal
-- Viraj Shah
-- Apurv Sawant
-- Shantanu Dhamdhere
-
 ## Project Motivation
 
 The system targets a core gap in existing accessibility tooling:
@@ -49,7 +40,9 @@ High-level flow:
 
 Streamlit web app demo video:
 
-- [Watch the demo](reports_and_presentations/streamlit-web-app-demo.mp4)
+https://github.com/user-attachments/assets/0449c8fd-576f-4e59-8958-f5ba186e1319
+
+Demo video can be found at path `reports_and_presentations/streamlit-web-app-demo.mp4`
 
 ## What Is In This Repo
 
@@ -284,3 +277,12 @@ Project presentation files are stored under:
 Research paper report file is stored under:
 
 - `reports_and_presentations/Research Paper - Multi-Agent Web Accessibility Improvement System.pdf`
+
+## Team Members
+
+- Akshat Bhat
+- Trusha Talati
+- Isha Agrawal
+- Viraj Shah
+- Apurv Sawant
+- Shantanu Dhamdhere
