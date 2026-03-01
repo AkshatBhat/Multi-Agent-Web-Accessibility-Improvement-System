@@ -1,7 +1,7 @@
 from autogen.agentchat import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
 import json
 import pickle
-import os
+from pathlib import Path
 
 # A silent proxy for driving “human” turns
 user_proxy = UserProxyAgent(
@@ -11,8 +11,26 @@ user_proxy = UserProxyAgent(
     code_execution_config={"use_docker": False}
 )
 
+# Resolve project paths relative to this script so execution is cwd-agnostic.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+TEST_JSON_PATH = PROJECT_ROOT / "test_data" / "test_file.json"
+PICKLES_DIR = PROJECT_ROOT / "agent_pickles"
+
+
+def load_pickle_with_fallback(candidates: list[str], label: str):
+    for name in candidates:
+        path = PICKLES_DIR / name
+        if path.exists():
+            with open(path, "rb") as f:
+                return pickle.load(f)
+    tried = ", ".join(candidates)
+    raise FileNotFoundError(
+        f"Could not find pickle for {label} in {PICKLES_DIR}. Tried: {tried}"
+    )
+
+
 # Load your UI JSON once
-with open("test_data/test_file.json", "r", encoding="utf-8") as f:
+with open(TEST_JSON_PATH, "r", encoding="utf-8") as f:
     ui_json = json.load(f)
 
 # 1) Make sure your JSON is a string
@@ -32,11 +50,23 @@ class ChatWrapperAgent(AssistantAgent):
         raw_json = messages[0]["content"]
         return self.t5_agent.handle(raw_json)
 
-# Load magents from Pickle files
-semantic_model = pickle.load(open("agent_pickles/semantic_agent.pkl", "rb"))
-contrast_model = pickle.load(open("agent_pickles/contrast_agent.pkl", "rb"))
-axe_agent = pickle.load(open("agent_pickles/axe_agent.pkl", "rb"))
-image_caption_model = pickle.load(open("agent_pickles/image_captioning_agent.pkl", "rb"))
+# Load agents from pickle files (supports both legacy and current filenames)
+semantic_model = load_pickle_with_fallback(
+    ["semantic_model.pkl", "semantic_agent.pkl"],
+    "semantic model",
+)
+contrast_model = load_pickle_with_fallback(
+    ["contrast_model.pkl", "contrast_agent.pkl"],
+    "contrast model",
+)
+axe_agent = load_pickle_with_fallback(
+    ["axe_agent.pkl"],
+    "axe model",
+)
+image_caption_model = load_pickle_with_fallback(
+    ["image_caption_model.pkl", "image_captioning_agent.pkl"],
+    "image captioning model",
+)
 
 semantic_wrapper = ChatWrapperAgent("semantic-agent", semantic_model)
 contrast_wrapper = ChatWrapperAgent("contrast-agent", contrast_model)

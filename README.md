@@ -255,7 +255,6 @@ Feedback platform used in the study:
 
 - Notebook files (`baseCode.ipynb`, `training/contrast_agent.ipynb`) still include Google Colab-specific paths (for example `/content/drive/...`) as part of the original experimentation workflow.
 - Ensure `SUPABASE_URL` and `SUPABASE_KEY` are set in environment variables or Streamlit secrets before running `webapp/accessibility_eval_app.py`.
-- `scripts/calling_agents.py` references pickle filenames that may not exactly match current files in `agent_pickles/`; adjust names/paths as needed.
 
 ## Research Paper Report and Presentations
 
