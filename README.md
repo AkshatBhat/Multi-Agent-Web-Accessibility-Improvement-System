@@ -261,13 +261,11 @@ Key findings highlighted in the presentation:
 Feedback platform used in the study:
 
 - https://ai-assistant-for-accessibility.streamlit.app/  
-  *(used successfully during Spring 2025 data collection; currently discontinued/non-functional)*
+  *(this hosted feedback platform link was used successfully during Spring 2025 data collection; currently not functional)*
 
-## Current Limitations and Operational Notes
+## Implementation Note
 
 - Notebook files (`baseCode.ipynb`, `training/contrast_agent.ipynb`) still include Google Colab-specific paths (for example `/content/drive/...`) as part of the original experimentation workflow.
-- Ensure `SUPABASE_URL` and `SUPABASE_KEY` are set in environment variables or Streamlit secrets before running `webapp/accessibility_eval_app.py`.
-- The hosted feedback platform link above is currently not functional on the web (it was operational during the original user-study period).
 
 ## Research Paper Report and Presentations
 
